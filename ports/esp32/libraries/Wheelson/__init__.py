@@ -5,6 +5,7 @@ from .Pins import *
 from .Nuvoton import *
 from .WheelsonMotors import *
 from .WheelsonLED import *
+from .WheelsonInput import *
 
 spiTFT: SPI = SPI(1, baudrate=27000000, polarity=0, phase=0, sck=Pin(Pins.TFT_SCK), mosi=Pin(Pins.TFT_MOSI))
 tft = TFT(spiTFT, aDC=Pins.TFT_DC, aReset=Pins.TFT_RST, aCS=Pins.TFT_CS)
@@ -14,6 +15,7 @@ i2c = I2C(0, sda=Pin(Pins.I2C_SDA), scl=Pin(Pins.I2C_SCL))
 nuvo = NuvotonInterface(i2c)
 Motors = MotorControl(i2c)
 LED = LEDControl(i2c)
+buttons = WheelInput(i2c)
 
 
 def begin():
@@ -26,3 +28,5 @@ def begin():
 
     nuvo.begin()
     LED.setBacklight(True)
+
+    buttons.scan()
