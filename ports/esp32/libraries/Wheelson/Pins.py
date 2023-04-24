@@ -2,9 +2,6 @@ from micropython import const
 
 
 class Pins:
-    BATT: int = const(39)
-    CHARGE: int = const(16)
-
     TFT_SCK: int = const(2)
     TFT_MOSI: int = const(13)
     TFT_DC: int = const(12)
@@ -13,6 +10,8 @@ class Pins:
 
     I2C_SDA: int = const(14)
     I2C_SCL: int = const(15)
+
+    NUVO_RESET: int = const(33)
 
 
 class Buttons:

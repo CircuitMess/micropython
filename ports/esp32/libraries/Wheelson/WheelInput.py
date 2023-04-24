@@ -1,21 +1,20 @@
 from CircuitOS import Input
 from micropython import const
-from .Nuvoton import WSNV_ADDR
-
-GET_NUM_EVENTS_BYTE = const(0x40)
-GET_EVENTS_BYTE = const(0x41)
-NUM_BUTTONS = const(6)
+from .Nuvoton import Nuvoton
 
 
 class WheelInput(Input):
-    def __init__(self, i2c):
-        super().__init__(NUM_BUTTONS)
-        self.i2c = i2c
+
+    BYTE_NUM_EVENTS = const(0x40)
+    BYTE_EVENTS = const(0x41)
+
+    def __init__(self, nuvo: Nuvoton):
+        super().__init__(6)
+        self.nuvo = nuvo
 
     def get_num_events(self):
-        self.i2c.writeto(WSNV_ADDR, bytes([GET_NUM_EVENTS_BYTE]))
-        num_events = self.i2c.readfrom(WSNV_ADDR, 1)
-        return num_events[0]
+        data = self.nuvo.write_read(self.BYTE_NUM_EVENTS, 1)
+        return data[0]
 
     def scan(self):
         num_events = self.get_num_events()
@@ -24,10 +23,7 @@ class WheelInput(Input):
         self.handle_events(num_events)
 
     def handle_events(self, num_events):
-        msg = bytearray([GET_EVENTS_BYTE, num_events])
-        data = bytearray(num_events)
-        self.i2c.writeto(WSNV_ADDR, msg)
-        self.i2c.readfrom_into(WSNV_ADDR, data)
+        data = self.nuvo.write_read([self.BYTE_EVENTS, num_events], num_events)
         for event in data:
             event_id = event & 0x7F
             state = event >> 7

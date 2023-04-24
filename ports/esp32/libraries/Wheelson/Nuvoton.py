@@ -1,58 +1,68 @@
 from machine import Pin, I2C
+from time import sleep_ms
 from .Pins import *
-from time import sleep_us, sleep_ms
-
-IDENTIFY_BYTE = 0x00
-BATTERY_BYTE = 0x50
-WSNV_ADDR = 0x38
-WSNV_PIN_RESET = 33
-SHUTDOWN_BYTE = 0x51
 
 
-class NuvotonInterface:
-    def __init__(self, Wire):
-        self.Wire = Wire
+class Nuvoton:
+	ADDR = 0x38
+	BYTE_ID = 0x00
+	BYTE_BATT = 0x50
+	BYTE_SHUTDOWN = 0x51
 
-    def begin(self):
-        pin_reset = Pin(WSNV_PIN_RESET, Pin.OUT)
-        pin_reset.off()
-        sleep_ms(50)
-        pin_reset.on()
-        sleep_ms(500)
+	def __init__(self, i2c: I2C):
+		self.i2c = i2c
+		self.pin_reset = Pin(Pins.NUVO_RESET, Pin.OUT)
 
-        if not WSNV_ADDR in self.Wire.scan():
-            return False
-        return self.identify()
+	def begin(self):
+		self.reset()
+		sleep_ms(500)
 
-    def identify(self):
-        self.Wire.writeto(WSNV_ADDR, bytes([IDENTIFY_BYTE]))
-        value = self.Wire.readfrom(WSNV_ADDR, 1)
+		try:
+			self.read(self.BYTE_ID)
+		except OSError:
+			return False
 
-        return value[0] == WSNV_ADDR
+		return self.identify()
 
-    def reset(self):
-        pin_reset = Pin(WSNV_PIN_RESET, Pin.OUT)
-        pin_reset.off()
-        sleep_ms(50)
-        pin_reset.on()
+	def identify(self):
+		data = self.write_read(self.BYTE_ID, 1)
+		return data[0] == self.ADDR
 
-    def getBatteryVoltage(self):
-        self.Wire.writeto(WSNV_ADDR, bytes([BATTERY_BYTE]))
-        level = self.Wire.readfrom(WSNV_ADDR, 2)
+	def reset(self):
+		self.pin_reset.off()
+		sleep_ms(50)
+		self.pin_reset.on()
 
-        return level[0] << 8 | level[1]
+	def get_battery(self):
+		data = self.write_read(self.BYTE_BATT, 2)
+		return data[0] << 8 | data[1]
 
-    def getWire(self):
-        return self.Wire
+	def shutdown(self):
+		from Wheelson import motors, led
+		from .LED import LED
 
-    def shutdown(self):
-        for i in range(4):
-            Motors.setMotor(i, 0)
-        LED.setBacklight(False)
-        LED.setHeadlight(0)
-        LED.setRGB(OFF)
+		for i in range(4):
+			motors.set(i, 0)
 
-        self.Wire.writeto(WSNV_ADDR, bytes([SHUTDOWN_BYTE]))
+		led.set_backlight(False)
+		led.set_headlight(0)
+		led.set_rgb(LED.Color.Off)
 
-    def getI2C(self):
-        return self.Wire
+		try:
+			self.write(self.BYTE_SHUTDOWN)
+		except OSError:
+			pass
+
+	def write(self, data: [] | int):
+		if type(data) is int:
+			data = [data]
+
+		self.i2c.writeto(self.ADDR, bytes(data))
+
+	def read(self, nbytes: int):
+		return self.i2c.readfrom(self.ADDR, nbytes)
+
+	def write_read(self, data: [] | int, nbytes: int):
+		self.write(data)
+		sleep_ms(1)
+		return self.read(nbytes)
