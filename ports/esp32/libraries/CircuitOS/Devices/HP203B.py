@@ -1,13 +1,14 @@
 from machine import I2C
 import time
+from micropython import const
 
 
 class HP203B:
-    HP203B_ADDR = 0x76
-    PRESSURE = 0x30
-    ALTITUDE = 0x31
+    ADDR = const(0x76)
+    PRESSURE = const(0x30)
+    ALTITUDE = const(0x31)
 
-    def __init__(self, i2c: I2C, addr: int = HP203B_ADDR):
+    def __init__(self, i2c: I2C, addr: int = ADDR):
         self._i2c = i2c
         self._addr = addr
 

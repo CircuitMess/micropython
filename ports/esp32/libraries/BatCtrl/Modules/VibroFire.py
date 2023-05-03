@@ -15,10 +15,10 @@ class VibroFire:
 
         for i in range(16):
             if i == self.vibro_pin:
-                self.aw9523.pinMode(self.vibro_pin, AW9523.OUT)
+                self.aw9523.pin_mode(self.vibro_pin, AW9523.OUT)
                 self.set_vibrating(self.vibro)
             else:
-                self.aw9523.pinMode(i, AW9523.LED)
+                self.aw9523.pin_mode(i, AW9523.LED)
                 self.aw9523.dim(i, 0)
 
         return True

@@ -1,10 +1,11 @@
 from machine import I2C
+from micropython import const
 
 
 class LIS2DW:
-    LIS2DW_DEFAULT_ADDR = 0x18
+    ADDR = const(0x18)
 
-    def __init__(self, i2c: I2C, address: int = LIS2DW_DEFAULT_ADDR):
+    def __init__(self, i2c: I2C, address: int = ADDR):
         self._i2c = i2c
         self._addr = address
 
@@ -22,7 +23,7 @@ class LIS2DW:
         data = self._i2c.readfrom(self._addr, length)
         return data
 
-    def get(self) -> tuple:
+    def get_accel(self) -> tuple:
         data = self._read_data(0x28, 6)
 
         x = (data[1] << 8) | data[0]
@@ -37,13 +38,13 @@ class LIS2DW:
         return temp
 
     def get_x(self) -> int:
-        x, _, _ = self.get()
+        x, _, _ = self.get_accel()
         return x
 
     def get_y(self) -> int:
-        _, y, _ = self.get()
+        _, y, _ = self.get_accel()
         return y
 
     def get_z(self) -> int:
-        _, _, z = self.get()
+        _, _, z = self.get_accel()
         return z

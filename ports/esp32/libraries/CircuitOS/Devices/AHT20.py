@@ -1,25 +1,25 @@
 from machine import I2C
 import time
+from micropython import const
 
 
 class AHT20:
-    AHT20_ADDR = 0x38
+    ADDR = const(0x38)
 
     def __init__(self, i2c: I2C):
         self._i2c = i2c
-        self._addr = self.AHT20_ADDR
 
     def begin(self) -> bool:
         try:
-            self._i2c.writeto(self._addr, bytearray([0x00]))
+            self._i2c.writeto(self.ADDR, bytearray([0x00]))
             return True
         except OSError:
             return False
 
     def _read_data(self):
-        self._i2c.writeto(self._addr, bytearray([0xAC, 0x33, 0x00]))
-        data = self._i2c.readfrom(self._addr, 6)
+        self._i2c.writeto(self.ADDR, bytearray([0xAC, 0x33, 0x00]))
         time.sleep_ms(80)
+        data = self._i2c.readfrom(self.ADDR, 6)
         return data
 
     def get_hum(self) -> float:
