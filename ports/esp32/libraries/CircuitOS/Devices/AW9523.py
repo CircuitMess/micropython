@@ -81,6 +81,9 @@ class AW9523:
         reg = (0x00 if pin <= 7 else 0x01)
         return (self._read_reg(reg) & (1 << (pin if pin <= 7 else pin - 8))) != 0
 
+    def state_read(self):
+        return self._read_reg(0x00) | (self._read_reg(0x01) << 8)
+
     def write(self, pin: int, state: bool):
         if pin >= 16:
             return
