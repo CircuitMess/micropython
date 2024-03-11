@@ -10,8 +10,8 @@ enc_l = Encoder(Pins.ENC_L1, Pins.ENC_L2)
 enc_r = Encoder(Pins.ENC_R1, Pins.ENC_R2)
 encoders = Encoders([enc_l, enc_r])
 
-slider_l = Slider(Pins.POT_L, min=220, max=720, ema_a=0.01, reverse=True)
-slider_r = Slider(Pins.POT_R, min=220, max=720, ema_a=0.01, reverse=True)
+slider_l = Slider(Pins.POT_L, ADC.WIDTH_10BIT, min=220, max=720, ema_a=0.01, reverse=True)
+slider_r = Slider(Pins.POT_R, ADC.WIDTH_10BIT, min=220, max=720, ema_a=0.01, reverse=True)
 sliders = Sliders([slider_l, slider_r])
 
 

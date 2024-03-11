@@ -1,7 +1,8 @@
 from machine import Pin, ADC
 
+
 class Slider:
-    def __init__(self, pin: int, min: int = 0, max: int = 1024, ema_a: float = 0, reverse: bool = False):
+    def __init__(self, pin: int, width: int, min: int = 0, max: int = 1024, ema_a: float = 0, reverse: bool = False):
         self.pin = Pin(pin, mode=Pin.IN)
         self.min = min
         self.max = max
@@ -10,7 +11,7 @@ class Slider:
 
         self.adc = ADC(self.pin)
         self.adc.atten(ADC.ATTN_11DB)
-        self.adc.width(ADC.WIDTH_10BIT)
+        self.adc.width(width)
 
         initial_value = self._read()
         self.val = initial_value
