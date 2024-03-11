@@ -128,7 +128,7 @@ class InputGPIO(Input):
 				self.released(i)
 
 
-class InputExpander(Input):
+class InputPCA95XX(Input):
 
 	def __init__(self, expander: PCA95XX):
 		super().__init__(16)

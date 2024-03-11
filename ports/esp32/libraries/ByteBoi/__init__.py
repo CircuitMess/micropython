@@ -17,12 +17,12 @@ spi: SPI = SPI(1, baudrate=16000000, polarity=0, phase=0, sck=Pin(Pins.SPI_SCK),
 			   miso=Pin(Pins.SPI_MISO))
 
 if variant == 0:
-	from CircuitOS import PanelILI9341, InputExpander
+	from CircuitOS import PanelILI9341, InputPCA95XX
 
 	panel = PanelILI9341(spi, dc=Pin(Pins.TFT_DC, Pin.OUT), reset=Pin(Pins.TFT_RST, Pin.OUT),
 						 cs=Pin(Pins.TFT_CS, Pin.OUT), rotation=1)
 	panel.init()
-	buttons = InputExpander(expander)
+	buttons = InputPCA95XX(expander)
 	for btn in dir(Buttons):
 		attr = getattr(Buttons, btn)
 		if type(attr) != int:
