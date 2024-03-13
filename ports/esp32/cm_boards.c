@@ -1,6 +1,8 @@
 #include "cm_boards.h"
 #include "driver/gpio.h"
 
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+
 static void init_artemis(){
 	static const gpio_num_t PWDN = GPIO_NUM_42;
 	static const gpio_num_t LEDs[] = { 17, 18, 43, 44, 45, 46 };
@@ -36,10 +38,18 @@ static void init_perse_missionctrl(){
 
 }
 
+#elifdef CONFIG_IDF_TARGET_ESP32
+
+#endif
+
 void cm_boards_init(){
 	// TODO: efuse check board
 
+#ifdef CONFIG_IDF_TARGET_ESP32S3
 	if(0){
 		init_artemis();
 	}
+#elifdef CONFIG_IDF_TARGET_ESP32
+
+#endif
 }
