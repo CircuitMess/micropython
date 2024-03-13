@@ -1,0 +1,18 @@
+{
+    "vendor": "CircuitMess",
+    "product": "ESP32S3 Devices",
+    "thumbnail": "",
+    "url": "https://circuitmess.com/",
+    "images": [],
+
+    "docs": "",
+    "mcu": "esp32s3",
+    "features": [
+        "USB-C",
+        "BLE",
+        "WiFi"
+    ],
+    "deploy": [
+        "../deploy_s3.md"
+    ]
+}
