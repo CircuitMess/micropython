@@ -6,31 +6,31 @@ class LED:
 
     def __init__(self, aw9523: AW9523):
         self.aw9523 = aw9523
-        self.expanderPins = {
-            LEDs.CamL4: 0x10,
-            LEDs.CamL3: 0x10,
-            LEDs.CamL2: 0x10,
-            LEDs.CamL1: 0x10,
-            LEDs.CamCenter: 0x10,
-            LEDs.CamR1: 0x10,
-            LEDs.CamR2: 0x10,
-            LEDs.CamR3: 0x10,
-            LEDs.CamR4: 0x10,
-            LEDs.Warning: 0x10,
-            LEDs.Arm: 0x10,
-            LEDs.ArmUp: 0x10,
-            LEDs.ArmDown: 0x10,
-            LEDs.Light: 0x10,
-            LEDs.PinchOpen: 0x10,
-            LEDs.PinchClose: 0x10,
-        }
+        self.expanderPins = [
+            LEDs.CamL4,
+            LEDs.CamL3,
+            LEDs.CamL2,
+            LEDs.CamL1,
+            LEDs.CamCenter,
+            LEDs.CamR1,
+            LEDs.CamR2,
+            LEDs.CamR3,
+            LEDs.CamR4,
+            LEDs.Warning,
+            LEDs.Arm,
+            LEDs.ArmUp,
+            LEDs.ArmDown,
+            LEDs.Light,
+            LEDs.PinchOpen,
+            LEDs.PinchClose
+        ]
 
-        self.gpioPins = {
-            LEDs.Power: 150,
-            LEDs.Pair: 150,
-            LEDs.PanicL: 150,
-            LEDs.PanicR: 150,
-        }
+        self.gpioPins = [
+            LEDs.Power,
+            LEDs.Pair,
+            LEDs.PanicL,
+            LEDs.PanicR
+        ]
 
         self.gpioLeds = [SingleLED(LEDs.Pins[pin]) for pin in self.gpioPins]
 
@@ -46,17 +46,17 @@ class LED:
     def set(self, pin: int, value: int):
         """
         @param pin: pin from LEDs
-        @param value: value from 0 to 255
+        @param value: value from 0 to 100
         @return:
         """
+        value = min(max(value, 0), 100)
+
         if pin in self.expanderPins:
-            self.aw9523.dim(LEDs.Pins[pin], self.constrain_value(value, self.expanderPins[pin]))
+            scaled = float(value) / 100
+            scaled = scaled * scaled
+            scaled = scaled * 255
+            self.aw9523.dim(LEDs.Pins[pin], int(scaled))
         elif pin in self.gpioPins:
-            constrained = float(self.constrain_value(value, self.gpioPins[pin])) * 100.0 / 255.0
-            self.gpioLeds[pin].set(int(constrained))
+            self.gpioLeds[pin].set(value)
         else:
             return
-
-    def constrain_value(self, value: int, limit: int) -> int:
-        percent: float = max(min(1.0 * ((float(value) * float(limit)) / float(0xFF)) / float(limit), 1.0), 0.0)
-        return int(percent * percent * float(limit))
