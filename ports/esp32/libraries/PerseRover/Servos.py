@@ -15,8 +15,6 @@ class ServoControl:
 		(180, 465)
 	]
 
-	StartPos = [((i[1] - i[0]) / 2 + i[0]) for i in Limits]
-
 	def __init__(self, pins: tuple):
 		self.pins = []
 		self.state = [0] * 3
@@ -36,11 +34,10 @@ class ServoControl:
 
 	def center(self):
 		for i in range(3):
-			self.set(i, self.StartPos[i])
+			self.set(i, 512)
 
 	def _send(self, motor: int, pos: int):
 		value = self._map(motor, pos)
-		print("motor: ", motor, ", actual value: ", value)
 		self.pins[motor].duty(value)
 
 	def _map(self, motor: int, value: int) -> int:
