@@ -31,11 +31,11 @@ static void init_artemis(){
 }
 
 static void init_perse_rover(){
-
+	// Set Power LED to ON
 }
 
 static void init_perse_missionctrl(){
-
+	// Set Power LED to ON
 }
 
 #elifdef CONFIG_IDF_TARGET_ESP32
