@@ -2,7 +2,7 @@ from .Pins import *
 from .MotorControl import *
 from machine import Pin, Signal, I2C
 from CircuitOS import AW9523, InputAW9523
-from .Servos import ServoControl
+from .Servos import ServoControl, Servo
 from ._LED import LED
 
 motors = MotorControl((
