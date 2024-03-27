@@ -50,8 +50,8 @@ class Buttons:
 class LEDs:
 	Camera = const(0)
 	Rear = const(1)
-	SideLeft = const(2)
-	SideRight = const(3)
+	SideRight = const(2)
+	SideLeft = const(3)
 	Power = const(4)
 	FrontLeft = const(5)
 	FrontRight = const(6)
