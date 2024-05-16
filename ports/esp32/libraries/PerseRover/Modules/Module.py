@@ -1,4 +1,4 @@
-from .Modules import *
+from . import _Modules
 
 
 class Module:
@@ -6,13 +6,13 @@ class Module:
 	def __init__(self):
 		self.inited = False
 
-	def _init(self, bus: Modules.Side):
+	def _init(self, bus: _Modules.Modules.Side):
 		pass
 
 	def _deinit(self):
 		pass
 
-	def initialize(self, bus: Modules.Side):
+	def initialize(self, bus: _Modules.Modules.Side):
 		if self.inited:
 			return
 		self._init(bus)

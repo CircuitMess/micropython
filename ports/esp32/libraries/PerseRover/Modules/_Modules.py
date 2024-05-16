@@ -1,9 +1,16 @@
 from micropython import const
 from machine import Pin, ADC, I2C
+import time
 
 from CircuitOS import PCA95XX
 from .AltPressModule import *
 from .CO2Sensor import *
+from .GyroModule import *
+from .LEDModule import *
+from .MotionSensor import *
+from .RGBModule import *
+from .PhotoresModule import *
+from .TempHumModule import *
 from PerseRover.Pins import *
 
 
@@ -109,6 +116,8 @@ class Modules:
 				return ModuleType.Unknown
 			return self.AddressDict.get(addr)
 
+		time.sleep_ms(50)  # Give time to the I2C bus to settle and periphery to initialize
+
 		for addr in self.I2CAddressDict:
 			if self.check_i2c(addr):
 				return self.I2CAddressDict.get(addr)
@@ -124,7 +133,8 @@ class Modules:
 			removed = context.current
 			context.current = ModuleType.Unknown
 
-			self.remove_callback()
+			if self.remove_callback is not None:
+				self.remove_callback()
 
 			if removed in self.ModuleInstanceDict:
 				module: Module = self.ModuleInstanceDict.get(removed)
@@ -134,7 +144,8 @@ class Modules:
 			context.current = self.check_addr(bus)
 			context.inserted = True
 
-			self.insert_callback()
+			if self.insert_callback is not None:
+				self.insert_callback()
 
 			if context.current in self.ModuleInstanceDict:
 				module: Module = self.ModuleInstanceDict.get(context.current)
@@ -156,3 +167,21 @@ class Modules:
 
 		self.CO2Sensor = CO2Sensor()
 		self.ModuleInstanceDict[ModuleType.CO2] = self.CO2Sensor
+
+		self.gyroModule = GyroModule(self.i2c)
+		self.ModuleInstanceDict[ModuleType.Gyro] = self.gyroModule
+
+		self.ledModule = LEDModule()
+		self.ModuleInstanceDict[ModuleType.LED] = self.ledModule
+
+		self.rgbModule = RGBModule()
+		self.ModuleInstanceDict[ModuleType.RGB] = self.rgbModule
+
+		self.photoResModule = PhotoresModule()
+		self.ModuleInstanceDict[ModuleType.PhotoRes] = self.photoResModule
+
+		self.tempHumModule = TempHumModule(self.i2c)
+		self.ModuleInstanceDict[ModuleType.TempHum] = self.tempHumModule
+
+		self.motionModule = MotionSensor()
+		self.ModuleInstanceDict[ModuleType.Motion] = self.motionModule

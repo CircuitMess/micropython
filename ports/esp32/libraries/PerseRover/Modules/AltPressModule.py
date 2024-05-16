@@ -1,5 +1,5 @@
 from CircuitOS.Devices.HP203B import HP203B
-from .Modules import *
+from . import _Modules
 from .Module import *
 
 
@@ -10,7 +10,7 @@ class AltPressModule(Module):
 		super().__init__()
 		self.sensor = HP203B(i2c, self.Addr)
 
-	def _init(self, bus: Modules.Side):
+	def _init(self, bus: _Modules.Modules.Side):
 		self.sensor.begin()
 
 	def _deinit(self):
