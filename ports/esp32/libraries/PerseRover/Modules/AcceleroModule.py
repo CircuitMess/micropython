@@ -3,7 +3,7 @@ from . import _Modules
 from .Module import *
 
 
-class GyroModule(Module):
+class AcceleroModule(Module):
 	Addr = const(0x18)
 
 	def __init__(self, i2c):
@@ -16,6 +16,19 @@ class GyroModule(Module):
 
 	def _deinit(self):
 		pass
+
+	def get_x(self) -> float:
+		if self.side == _Modules.Modules.Side.LEFT:
+			return -self.sensor.get_x()
+		return self.sensor.get_x()
+
+	def get_y(self) -> float:
+		if self.side == _Modules.Modules.Side.LEFT:
+			return -self.sensor.get_y()
+		return self.sensor.get_y()
+
+	def get_z(self) -> float:
+		return self.sensor.get_z()
 
 	def get_data(self) -> tuple:
 		res = self.sensor.get_accel()

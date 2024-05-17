@@ -6,6 +6,10 @@ from PerseRover.Pins import *
 
 
 class RGBModule(Module):
+	class Index:
+		A = 0
+		B = 1
+		C = 2
 
 	def __init__(self):
 		super().__init__()
@@ -19,10 +23,16 @@ class RGBModule(Module):
 		pass
 
 	def set(self, index: int, r: int, g: int, b: int):
-		self.np[index] = (r, g, b)
+		r = min(100, max(0, r))
+		g = min(100, max(0, g))
+		b = min(100, max(0, b))
+		self.np[index] = (r * 255 / 100, g * 255 / 100, b * 255 / 100)
 		self.np.write()
 
 	def set_all(self, r: int, g: int, b: int):
+		r = min(100, max(0, r))
+		g = min(100, max(0, g))
+		b = min(100, max(0, b))
 		for i in range(3):
-			self.np[i] = (r, g, b)
+			self.np[i] = (r * 255 / 100, g * 255 / 100, b * 255 / 100)
 		self.np.write()

@@ -5,7 +5,7 @@ import time
 from CircuitOS import PCA95XX
 from .AltPressModule import *
 from .CO2Sensor import *
-from .GyroModule import *
+from .AcceleroModule import *
 from .LEDModule import *
 from .MotionSensor import *
 from .RGBModule import *
@@ -16,7 +16,7 @@ from PerseRover.Pins import *
 
 class ModuleType:
 	TempHum = const(1)
-	Gyro = const(2)
+	Accelero = const(2)
 	AltPress = const(3)
 	LED = const(4)
 	RGB = const(5)
@@ -43,7 +43,7 @@ class Modules:
 
 	I2CAddressDict = {
 		const(0x38): ModuleType.TempHum,
-		const(0x18): ModuleType.Gyro,
+		const(0x18): ModuleType.Accelero,
 		const(0x76): ModuleType.AltPress
 	}
 
@@ -162,14 +162,14 @@ class Modules:
 		return False
 
 	def construct_modules(self):
-		self.altPressModule = AltPressModule(self.i2c)
-		self.ModuleInstanceDict[ModuleType.AltPress] = self.altPressModule
+		self.altPress = AltPressModule(self.i2c)
+		self.ModuleInstanceDict[ModuleType.AltPress] = self.altPress
 
-		self.CO2Sensor = CO2Sensor()
-		self.ModuleInstanceDict[ModuleType.CO2] = self.CO2Sensor
+		self.CO2 = CO2Sensor()
+		self.ModuleInstanceDict[ModuleType.CO2] = self.CO2
 
-		self.gyroModule = GyroModule(self.i2c)
-		self.ModuleInstanceDict[ModuleType.Gyro] = self.gyroModule
+		self.accel = AcceleroModule(self.i2c)
+		self.ModuleInstanceDict[ModuleType.Accelero] = self.accel
 
 		self.ledModule = LEDModule()
 		self.ModuleInstanceDict[ModuleType.LED] = self.ledModule
@@ -177,11 +177,11 @@ class Modules:
 		self.rgbModule = RGBModule()
 		self.ModuleInstanceDict[ModuleType.RGB] = self.rgbModule
 
-		self.photoResModule = PhotoresModule()
-		self.ModuleInstanceDict[ModuleType.PhotoRes] = self.photoResModule
+		self.photoRes = PhotoresModule()
+		self.ModuleInstanceDict[ModuleType.PhotoRes] = self.photoRes
 
-		self.tempHumModule = TempHumModule(self.i2c)
-		self.ModuleInstanceDict[ModuleType.TempHum] = self.tempHumModule
+		self.tempHum = TempHumModule(self.i2c)
+		self.ModuleInstanceDict[ModuleType.TempHum] = self.tempHum
 
-		self.motionModule = MotionSensor()
-		self.ModuleInstanceDict[ModuleType.Motion] = self.motionModule
+		self.motion = MotionSensor()
+		self.ModuleInstanceDict[ModuleType.Motion] = self.motion
