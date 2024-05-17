@@ -1,4 +1,4 @@
-from machine import Pin, I2C
+from machine import Pin, I2C, ADC
 from CircuitOS import InputShift, Encoder, IS31FL3731, MatrixOutputCharlie, Matrix, ShiftOutput, Slider, Encoders, Sliders
 from .MatrixMap import *
 from .MatrixRGB import *
