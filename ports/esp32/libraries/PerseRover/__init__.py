@@ -1,7 +1,8 @@
-from .Pins import *
-from .MotorControl import *
-from machine import Pin, Signal, I2C
+from machine import Pin, I2C
 from CircuitOS import AW9523, InputAW9523
+from .Modules import *
+from .MotorControl import *
+from .Pins import *
 from .Servos import ServoControl, Servo
 from ._LED import LED
 
@@ -28,7 +29,14 @@ servos = ServoControl((
 	Pins.SERVO_3_PWM
 ))
 
+pca9555 = PCA95XX(i2c, 0x20)
+pca9555.begin()
+
+modules = Modules(i2c, pca9555)
+
 
 def begin():
 	servos.center()
 	buttons.scan()
+	modules.update()
+
