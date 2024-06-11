@@ -26,7 +26,7 @@ class RGBModule(Module):
 		r = min(100, max(0, r))
 		g = min(100, max(0, g))
 		b = min(100, max(0, b))
-		self.np[index] = (r * 255 / 100, g * 255 / 100, b * 255 / 100)
+		self.np[index] = (int(float(r) * 255.0 / 100.0), int(float(g) * 255.0 / 100.0), int(float(b) * 255.0 / 100.0))
 		self.np.write()
 
 	def set_all(self, r: int, g: int, b: int):
@@ -34,5 +34,5 @@ class RGBModule(Module):
 		g = min(100, max(0, g))
 		b = min(100, max(0, b))
 		for i in range(3):
-			self.np[i] = (r * 255 / 100, g * 255 / 100, b * 255 / 100)
+			self.np[i] = (int(float(r) * 255.0 / 100.0), int(float(g) * 255.0 / 100.0), int(float(b) * 255.0 / 100.0))
 		self.np.write()
