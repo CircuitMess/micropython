@@ -43,7 +43,7 @@ class MotorControl:
 
 		self.__values[motor] = value
 
-		reverse = value < 0
+		reverse = value > 0
 		if motor == Motor.Right:
 			reverse = not reverse
 
