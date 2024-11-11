@@ -1,4 +1,3 @@
-from ST7735 import TFT
 from machine import SPI, Pin, Signal, I2C
 from CircuitOS import InputGPIO, Display, Piezo, PanelST7735_128x128
 from .Pins import *
@@ -17,6 +16,11 @@ panel = PanelST7735_128x128(spiTFT, dc=dc, reset=reset, rotation=2)
 display = Display(panel)
 
 i2c = I2C(0, sda=Pin(Pins.I2C_SDA), scl=Pin(Pins.I2C_SCL))
+
+leds = []
+for pin in LEDs.Pins:
+	led = Signal(Pin(pin, mode=Pin.OUT), invert=False)
+	leds.append(led)
 
 
 def begin():

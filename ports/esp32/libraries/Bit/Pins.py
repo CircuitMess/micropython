@@ -35,3 +35,23 @@ class Buttons:
         const(8),
         const(9)
     ])
+
+class LEDs:
+    Up: int = const(0)
+    Down: int = const(1)
+    Left: int = const(2)
+    Right: int = const(3)
+    A: int = const(4)
+    B: int = const(5)
+    C: int = const(6)
+
+    # Maps Buttons [0-3] to their respective GPIO pins
+    Pins: [int] = const([
+        const(47),
+        const(48),
+        const(0),
+        const(18),
+        const(17),
+        const(45),
+        const(46)
+    ])
