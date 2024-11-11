@@ -109,7 +109,7 @@ class InputGPIO(Input):
 		self.signals = []
 
 		for i in range(len(pins)):
-			pin = Pin(pins[i], mode=Pin.IN)
+			pin = Pin(pins[i], mode=Pin.IN, pull= Pin.PULL_UP if inverted else Pin.PULL_DOWN)
 			signal = Signal(pin, invert=inverted)
 
 			self.pins.append(pin)
