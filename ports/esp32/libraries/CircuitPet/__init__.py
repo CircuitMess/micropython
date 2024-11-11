@@ -2,7 +2,6 @@ from ST7735 import TFT
 from machine import SPI, Pin, Signal, I2C
 from CircuitOS import InputGPIO, Display, Piezo, RGB_LED, PanelST7735
 from .Pins import *
-from i2c_bm8563 import *
 
 spiTFT: SPI = SPI(1, baudrate=27000000, polarity=0, phase=0, sck=Pin(Pins.TFT_SCK), mosi=Pin(Pins.TFT_MOSI))
 
