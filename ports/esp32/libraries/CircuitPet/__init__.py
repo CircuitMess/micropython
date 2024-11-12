@@ -21,6 +21,8 @@ i2c = I2C(0, sda=Pin(Pins.I2C_SDA), scl=Pin(Pins.I2C_SCL))
 
 
 def begin():
+	rgb.set(0,0,0)
+
 	panel.init()
 
 	display.fill(Display.Color.Black)
