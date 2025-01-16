@@ -1,21 +1,16 @@
 from machine import Pin, ADC
+from CircuitOS.Devices import ADS1015
 
 
 class Slider:
-    def __init__(self, pin: int, width: int, min: int = 0, max: int = 1024, ema_a: float = 0, reverse: bool = False):
-        self.pin = Pin(pin, mode=Pin.IN)
+    def __init__(self, min: int = 0, max: int = 1024, ema_a: float = 0, reverse: bool = False):
         self.min = min
         self.max = max
         self.ema_a = ema_a
         self.reverse = reverse
 
-        self.adc = ADC(self.pin)
-        self.adc.atten(ADC.ATTN_11DB)
-        self.adc.width(width)
-
-        initial_value = self._read()
-        self.val = initial_value
-        self.last_called_val = initial_value
+        self.val = 0
+        self.last_called_val = 0
 
         self._on_move = None
 
@@ -38,8 +33,11 @@ class Slider:
             self._on_move(round(self.val))
             self.last_called_val = self.val
 
+    def _raw_read(self) -> int:
+        pass
+
     def _read(self) -> float:
-        raw_value = self.adc.read()
+        raw_value = self._raw_read()
         mapped_value = self.map_value(raw_value)
         if self.reverse:
             mapped_value = 100 - mapped_value
@@ -48,6 +46,31 @@ class Slider:
     def map_value(self, x: int) -> float:
         x = max(self.min, min(self.max, x))
         return (x - self.min) * 100.0 / (self.max - self.min)
+
+
+class SliderADC(Slider):
+
+    def __init__(self, pin: int, width: int, min: int = 0, max: int = 1024, ema_a: float = 0, reverse: bool = False):
+        super().__init__(min, max, ema_a, reverse)
+        self.pin = Pin(pin, mode=Pin.IN)
+        self.adc = ADC(self.pin)
+        self.adc.atten(ADC.ATTN_11DB)
+        self.adc.width(width)
+
+    def _raw_read(self) -> int:
+        return self.adc.read()
+
+class SliderADS1015(Slider):
+
+        def __init__(self, ads: ADS1015, channel: int, min: int = 0, max: int = 1024, ema_a: float = 0, reverse: bool = False):
+            super().__init__(min, max, ema_a, reverse)
+            self.ads = ads
+            self.pin = channel
+
+        def _raw_read(self) -> int:
+            self.ads.read(self.pin)
+            return self.ads.read(self.pin)
+
 
 
 class Sliders:
