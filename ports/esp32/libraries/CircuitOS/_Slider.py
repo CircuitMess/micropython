@@ -9,8 +9,8 @@ class Slider:
         self.ema_a = ema_a
         self.reverse = reverse
 
-        self.val = 0
-        self.last_called_val = 0
+        self.val = -1
+        self.last_called_val = -1
 
         self._on_move = None
 
@@ -23,6 +23,11 @@ class Slider:
 
     def scan(self) -> None:
         mapped_value = self._read()
+
+        if self.val == -1:
+            self.val = mapped_value
+            self.last_called_val = mapped_value
+            return
 
         if self.ema_a != 0:
             self.val = self.ema_a * mapped_value + (1 - self.ema_a) * self.val
