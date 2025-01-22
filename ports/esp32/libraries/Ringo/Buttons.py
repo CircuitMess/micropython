@@ -40,17 +40,20 @@ class ButtonInput(Input):
 	def expander_scan(self):
 		state = self.expander.state_read()
 
-		for i in range(len(self.expander_btns)):
-			pin = Buttons.Pins[self.expander_btns[i]]
+		for exp_btn in self.expander_btns:
+			pin = Buttons.Pins[exp_btn]
 
-			if ((state >> pin) & 1) == 1:
-				self.released(pin)
+			released: bool = ((state >> pin) & 1) == 1
+			if pin == 14:
+				released = not released
+
+			if released:
+				self.released(exp_btn)
 			else:
-				self.pressed(pin)
+				self.pressed(exp_btn)
 
 	def ads_scan(self):
 		for btn in self.ads_btns:
-			# print("Buttons reading ADS channel", Buttons.Pins[btn])
 			self.ads.read(Buttons.Pins[btn])
 			if self.ads.read(Buttons.Pins[btn]) < 5:
 				self.pressed(btn)

@@ -40,8 +40,9 @@ class Buttons:
 	Num_0: int = const(9)
 	Num_Ast: int = const(10)
 	Num_Hash: int = const(11)
+
 	Home: int = const(12)
-	Power: int = const(13)
+	Power: int = const(13)  # Note: only input that behaves 0 - released, 1 - pressed, rest are pulled-up
 	Alt_L: int = const(14)
 	Alt_R: int = const(15)
 
@@ -63,8 +64,9 @@ class Buttons:
 		const(10),
 		const(9),
 		const(11),
-		const(14),
+
 		const(13),
+		const(14),
 		const(15),
 		const(12),
 
