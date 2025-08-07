@@ -88,10 +88,8 @@ class Pins:
 		self.currentMap = None
 		if revision == 0 or revision == 1:
 			self.currentMap = self.Rev1Map
-			print("Artemis rev1")
 		elif revision == 2:
 			self.currentMap = self.Rev2Map
-			print("Artemis rev2")
 		else:
 			print("Unknown revision", revision)
 
