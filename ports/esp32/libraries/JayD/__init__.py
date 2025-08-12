@@ -12,7 +12,7 @@ charlie = IS31FL3731(i2c)
 matrix_out = MatrixOutputCharlie(charlie)
 matrix_buf = MatrixOutputBuffered(matrix_out)
 
-matrix_big = Matrix(MatrixBig(matrix_buf))
+matrix_big = Matrix(MatrixBig(matrix_buf, revision))
 matrix_mid = Matrix(MatrixMid(matrix_buf))
 matrix_left = Matrix(MatrixLeft(matrix_buf))
 matrix_right = Matrix(MatrixRight(matrix_buf))
