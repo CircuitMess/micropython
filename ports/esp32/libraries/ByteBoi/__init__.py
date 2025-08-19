@@ -1,17 +1,21 @@
 from machine import SPI, Pin, Signal, I2C
 from CircuitOS import Display, PCA95XX, RGBSolidGPIO, RGBSolidExpander
 from .Pins import *
+import efuse
 
+revision = efuse.read_rev()
 i2c = I2C(0, sda=Pin(Pins.I2C_SDA), scl=Pin(Pins.I2C_SCL))
 
 expander = PCA95XX(i2c)
 
-variant = 1
-if expander.begin():
-	variant = 0
+if revision == 1:
+	variant = 2
+else:
+	variant = 1
+	if expander.begin():
+		variant = 0
 
 init_pins(variant)
-print(f"Variant: {variant}")
 
 spi: SPI = SPI(1, baudrate=16000000, polarity=0, phase=0, sck=Pin(Pins.SPI_SCK), mosi=Pin(Pins.SPI_MOSI),
 			   miso=Pin(Pins.SPI_MISO))
@@ -46,7 +50,7 @@ if variant == 0:
 	rgb = RGBSolidExpander(Pins.LED_R, Pins.LED_G, Pins.LED_B, expander)
 
 
-else:  # variant == 1
+elif variant == 1:
 	from CircuitOS import PanelST7789, InputShift
 
 	spiTFT: SPI = SPI(2, baudrate=16000000, polarity=1, phase=1, sck=Pin(Pins.TFT_SCK), mosi=Pin(Pins.TFT_MOSI))
@@ -58,8 +62,18 @@ else:  # variant == 1
 
 	buttons = InputShift(Pins.SHIFT_DAT, Pins.SHIFT_CLK, Pins.SHIFT_PL)
 	rgb = RGBSolidGPIO(Pins.LED_R, Pins.LED_G, Pins.LED_B)
+else:  # variant == 2
+	from CircuitOS import PanelST7789, InputShift
 
+	spiTFT: SPI = SPI(2, baudrate=16000000, polarity=1, phase=1, sck=Pin(Pins.TFT_SCK), mosi=Pin(Pins.TFT_MOSI))
+	panel = PanelST7789(spiTFT, dc=Pin(Pins.TFT_DC, Pin.OUT), reset=Pin(Pins.TFT_RST, Pin.OUT), rotation=3)
+	panel.init()
 
+	blPin = Pin(Pins.BL, mode=Pin.OUT, value=True)
+	backlight = Signal(blPin, invert=True)
+
+	buttons = InputShift(Pins.SHIFT_DAT, Pins.SHIFT_CLK, Pins.SHIFT_PL)
+	rgb = RGBSolidGPIO(Pins.LED_R, Pins.LED_G, Pins.LED_B)
 
 display = Display(panel)
 

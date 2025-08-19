@@ -9,9 +9,9 @@ class Nuvoton:
 	BYTE_BATT = 0x50
 	BYTE_SHUTDOWN = 0x51
 
-	def __init__(self, i2c: I2C):
+	def __init__(self, i2c: I2C, reset: Pin = None):
 		self.i2c = i2c
-		self.pin_reset = Pin(Pins.NUVO_RESET, Pin.OUT)
+		self.pin_reset = reset
 
 	def begin(self):
 		self.reset()

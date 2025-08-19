@@ -3,15 +3,7 @@ from .Nuvoton import Nuvoton
 import ustruct
 
 
-class Motor:
-	FrontLeft = const(0)
-	BackLeft = const(1)
-	FrontRight = const(2)
-	BackRight = const(3)
-
-
 class Motors:
-
 	BYTE_SET = const(0x30)
 	BYTE_GET = const(0x31)
 

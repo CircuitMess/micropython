@@ -2,11 +2,15 @@ from CircuitOS import MatrixOutputPart, MatrixOutputBuffered
 
 
 class MatrixBig(MatrixOutputPart):
-	def __init__(self, output: MatrixOutputBuffered):
+	def __init__(self, output: MatrixOutputBuffered, revision: int):
 		super().__init__(output, 8, 9)
+		self.revision = revision
 
 	def map(self, x, y):
-		return self.get_width() - x - 1, y
+		if (self.revision == 2):
+			return x, y
+		else:
+			return self.get_width() - x - 1, y
 
 
 class MatrixLeft(MatrixOutputPart):
