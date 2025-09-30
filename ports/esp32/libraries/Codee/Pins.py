@@ -50,10 +50,10 @@ class Pins:
 		I2C_SDA: const(36),
 		I2C_SCL: const(35),
 		LED: const(10),
-		BtnA: const(16),
-		BtnB: const(17),
-		BtnC: const(9),
-		BtnD: const(8)
+		BtnA: const(8),
+		BtnB: const(9),
+		BtnC: const(17),
+		BtnD: const(16)
 	}
 
 	def __init__(self, revision):
