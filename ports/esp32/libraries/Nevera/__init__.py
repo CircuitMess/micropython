@@ -26,7 +26,6 @@ servo = Servo(pins.get(Pins.SERVO_STEER))
 
 def begin():
 	buttons.scan()
-
 	servo.center()
 	headlights.setBoth(0)
 	taillights.setBoth(0)
