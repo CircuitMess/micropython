@@ -49,3 +49,19 @@ class LED:
 			self.gpioLeds[pin].set(value)
 		else:
 			return
+
+	def set_all(self, value: int):
+		"""
+		@param value: value from 0 to 100
+		@return:
+		"""
+		value = min(max(value, 0), 100)
+
+		for led in self.expanderLEDs:
+			scaled = float(value) / 100
+			scaled = scaled * scaled
+			scaled = scaled * 255
+			self.aw9523.dim(self.pins[led], int(scaled))
+
+		for led in self.gpioLeds:
+			led.set(value)
