@@ -77,11 +77,13 @@ class PanelST7735(Panel):
 
 
 class PanelST7735_128x128(Panel):
-	def __init__(self, spi: SPI, dc: Pin, reset: Pin = None, cs: Pin = None, rotation: int = 0):
+	def __init__(self, spi: SPI, dc: Pin, reset: Pin = None, cs: Pin = None, rotation: int = 0, rotations: list = None):
 		super().__init__(128, 128)
 		d = dict(spi=spi, width=self.height(), height=self.width(), dc=dc, rotation=rotation,
 				 color_order=st7789.BGR, inversion=False)
 
+		if rotations is not None:
+			d.update(rotations=rotations)
 		if cs is not None:
 			d.update(cs=cs)
 		if reset is not None:

@@ -1,4 +1,4 @@
-from machine import Pin, Signal
+from machine import Pin, Signal, TouchPad
 from .Devices.PCA95XX import PCA95XX
 from .Devices.AW9523 import AW9523
 
@@ -180,3 +180,34 @@ class InputAW9523(Input):
 
 		self.expander.pin_mode(pin, AW9523.IN)
 		self.buttons.append(pin)
+
+
+class InputTouch(Input):
+
+	def __init__(self, pins: [int], thresholds: [int]):
+		super().__init__(len(pins))
+		self.touchpads = []
+		self.thresholds = thresholds
+
+		for i in range(len(pins)):
+			try:
+				touchpad = TouchPad(Pin(pins[i]))
+			except ValueError:
+				print("TouchPad not supported on pin", pins[i])
+				return
+
+			self.touchpads.append(touchpad)
+
+	def scan(self):
+		state: [int] = []
+
+		for i in range(len(self.touchpads)):
+			touchpad = self.touchpads[i]
+			reading = touchpad.read()
+			state.append(0 if reading < self.thresholds[i] else 1)
+
+		for i in range(len(state)):
+			if state[i] == 1:
+				self.pressed(i)
+			else:
+				self.released(i)
