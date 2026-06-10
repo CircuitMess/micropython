@@ -26,8 +26,10 @@ leds = LED(aw9523, led_pins.pins)
 
 dc = Pin(pins.get(Pins.TFT_DC), Pin.OUT)
 reset = Pin(pins.get(Pins.TFT_RST), Pin.OUT)
-panel = PanelST7735_128x128(spiTFT, dc=dc, reset=reset, rotation=2)
+panel = PanelST7735_128x128(spiTFT, dc=dc, reset=reset, rotation=0,
+							rotations=[(0xB0, 128, 128, 32, 0)])
 display = Display(panel)
+
 
 
 def begin():
