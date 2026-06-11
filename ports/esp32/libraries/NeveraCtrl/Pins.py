@@ -110,11 +110,11 @@ class Buttons:
 
 
 class Touchpads:
-	Slider0: int = const(2)
-	Slider1: int = const(4)
-	Slider2: int = const(5)
-	Slider3: int = const(6)
-	Slider4: int = const(7)
+	Slider0: int = const(0)
+	Slider1: int = const(1)
+	Slider2: int = const(2)
+	Slider3: int = const(3)
+	Slider4: int = const(4)
 
 	Thresholds: [int] = const([
 		35000,  # Slider0
