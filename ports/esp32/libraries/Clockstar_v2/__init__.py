@@ -24,6 +24,10 @@ rgb = RGB_LED((pins.get(Pins.LED_R), pins.get(Pins.LED_G), pins.get(Pins.LED_B))
 if (revision == 1):
 	panel = PanelST7735_128x128(spiTFT, dc=Pin(pins.get(Pins.TFT_DC), Pin.OUT),
 								reset=Pin(pins.get(Pins.TFT_RST), Pin.OUT), rotation=2)
+elif (revision == 2):
+	panel = PanelST7735_128x128(spiTFT, dc=Pin(pins.get(Pins.TFT_DC), Pin.OUT),
+								reset=Pin(pins.get(Pins.TFT_RST), Pin.OUT), rotation=0,
+								rotations=[(0xc0, 128, 128, 32, 0)])
 else:
 	print("Unknown revision", revision)
 
