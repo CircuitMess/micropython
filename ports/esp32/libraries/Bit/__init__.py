@@ -22,7 +22,7 @@ dc = Pin(pins.get(Pins.TFT_DC), Pin.OUT)
 reset = Pin(pins.get(Pins.TFT_RST), Pin.OUT)
 if revision == 4:
 	panel = PanelST7735_128x128(spiTFT, dc=dc, reset=reset, rotation=0,
-								rotations=[(0x00, 128, 128, 32, 0)])
+								rotations=[(0x00, 128, 128, 0, 0)])
 else:
 	panel = PanelST7735_128x128(spiTFT, dc=dc, reset=reset,
 								rotation=0 if revision == 3 else 2)
