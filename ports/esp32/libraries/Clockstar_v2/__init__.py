@@ -20,10 +20,14 @@ backlight = Signal(Pin(pins.get(Pins.BL), mode=Pin.OUT, value=True), invert=True
 buttons = InputGPIO(btn_pins.get_pins_array(), inverted=False)
 
 piezo = Piezo(pins.get(Pins.BUZZ))
-rgb = RGB_LED((pins.get(Pins.LED_R), pins.get(Pins.LED_G), pins.get(Pins.LED_B)), False)
+rgb = RGB_LED((pins.get(Pins.LED_R), pins.get(Pins.LED_G), pins.get(Pins.LED_B)), True)
 if (revision == 1):
 	panel = PanelST7735_128x128(spiTFT, dc=Pin(pins.get(Pins.TFT_DC), Pin.OUT),
 								reset=Pin(pins.get(Pins.TFT_RST), Pin.OUT), rotation=2)
+elif (revision == 2):
+	panel = PanelST7735_128x128(spiTFT, dc=Pin(pins.get(Pins.TFT_DC), Pin.OUT),
+								reset=Pin(pins.get(Pins.TFT_RST), Pin.OUT), rotation=0,
+								rotations=[(0xc0, 128, 128, 0, 32)])
 else:
 	print("Unknown revision", revision)
 

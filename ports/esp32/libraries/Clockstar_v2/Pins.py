@@ -47,7 +47,7 @@ class Pins:
 
 	def __init__(self, revision):
 		self.currentMap = None
-		if revision == 1:
+		if revision == 1 or revision == 2:
 			self.currentMap = self.Rev2Map
 		else:
 			print("Unknown revision", revision)

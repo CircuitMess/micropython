@@ -60,7 +60,7 @@ class Pins:
 		self.currentMap = None
 		if revision == 0:
 			self.currentMap = self.Rev1Map
-		elif revision == 1:
+		elif revision == 1 or revision == 2:
 			self.currentMap = self.Rev2Map
 		else:
 			print("Unknown revision", revision)
