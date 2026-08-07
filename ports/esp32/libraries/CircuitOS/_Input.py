@@ -102,14 +102,18 @@ class InputShift(Input):
 
 class InputGPIO(Input):
 
-	def __init__(self, pins: [int], inverted: bool = False):
+	def __init__(self, pins: [int], inverted: bool = False, pull: int = -1):
 		super().__init__(len(pins))
 
 		self.pins = []
 		self.signals = []
 
+		# pull: -1 selects the pull automatically from 'inverted', None disables pulls (externally biased inputs)
+		if pull == -1:
+			pull = Pin.PULL_UP if inverted else Pin.PULL_DOWN
+
 		for i in range(len(pins)):
-			pin = Pin(pins[i], mode=Pin.IN, pull= Pin.PULL_UP if inverted else Pin.PULL_DOWN)
+			pin = Pin(pins[i], mode=Pin.IN, pull=pull)
 			signal = Signal(pin, invert=inverted)
 
 			self.pins.append(pin)

@@ -18,8 +18,8 @@ pca9555.begin()
 
 leds = LED(pca9555, led_pins.pins)
 
-# The button is active-high with external biasing
-buttons = InputGPIO(btn_pins.get_pins_array(), inverted=False)
+# The button is active-high with external biasing - internal pulls would load the node, so leave them off
+buttons = InputGPIO(btn_pins.get_pins_array(), inverted=False, pull=None)
 
 motors = Motors(i2c)
 
@@ -33,7 +33,5 @@ def begin():
 	pca9555.pin_write(Pins.EXP_SD_MODE, False)
 
 	motors.begin()
-
-	motors.set(Motor.Left, 100)
 
 	buttons.scan()
