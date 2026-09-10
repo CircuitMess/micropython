@@ -15,9 +15,9 @@ class Nuvoton:
 	NUM_ENC = const(7)
 	NUM_POT = const(3)
 
-	def __init__(self, i2c: I2C, revision: int):
+	def __init__(self, i2c: I2C, revision: int, pins: Pins):
 		self.i2c = i2c
-		self.pin_reset = Pin(Pins.NUVO_RESET, Pin.OUT)
+		self.pin_reset = Pin(pins.get(Pins.NUVO_RESET), Pin.OUT)
 		self.revision = revision
 
 		self._on_press = [None] * self.NUM_BTN
@@ -141,11 +141,9 @@ class Nuvoton:
 					new_val = evt.val
 					if evt.id != 0:
 						new_val = 255 - new_val
-					print("raw val", evt.val)
 					new_val = max(min(new_val, max_val), min_val)  # constrain to 70 - 185
 					new_val = (((float)(new_val) - min_val) / (max_val - min_val)) * 255.0
 					evt.val = new_val
-					print("mapped val", evt.val)
 
 				self._sliderVals[evt.id] = evt.val
 				if self._on_slider[evt.id] is not None:
