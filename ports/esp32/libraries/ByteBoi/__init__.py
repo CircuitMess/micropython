@@ -58,27 +58,19 @@ if variant == 0:
 	rgb = RGBSolidExpander(pins.get(Pins.LED_R), pins.get(Pins.LED_G), pins.get(Pins.LED_B), expander)
 
 
-elif variant == 1:
+else:
 	from CircuitOS import PanelST7789, InputShift
+
+	# variant 2 (v2.0) and 3 (v2.6) share the same panel setup
+	if variant == 2 or variant == 3:
+		rotation = 3
+	else:
+		rotation = 1
 
 	spiTFT: SPI = SPI(2, baudrate=16000000, polarity=1, phase=1, sck=Pin(pins.get(Pins.TFT_SCK)),
 					  mosi=Pin(pins.get(Pins.TFT_MOSI)))
 	panel = PanelST7789(spiTFT, dc=Pin(pins.get(Pins.TFT_DC), Pin.OUT), reset=Pin(pins.get(Pins.TFT_RST), Pin.OUT),
-						rotation=1)
-	panel.init()
-
-	blPin = Pin(pins.get(Pins.BL), mode=Pin.OUT, value=True)
-	backlight = Signal(blPin, invert=True)
-
-	buttons = InputShift(pins.get(Pins.SHIFT_DAT), pins.get(Pins.SHIFT_CLK), pins.get(Pins.SHIFT_PL))
-	rgb = RGBSolidGPIO(pins.get(Pins.LED_R), pins.get(Pins.LED_G), pins.get(Pins.LED_B))
-else:  # variant 2 (v2.0) and 3 (v2.6) share the same panel setup
-	from CircuitOS import PanelST7789, InputShift
-
-	spiTFT: SPI = SPI(2, baudrate=16000000, polarity=1, phase=1, sck=Pin(pins.get(Pins.TFT_SCK)),
-					  mosi=Pin(pins.get(Pins.TFT_MOSI)))
-	panel = PanelST7789(spiTFT, dc=Pin(pins.get(Pins.TFT_DC), Pin.OUT), reset=Pin(pins.get(Pins.TFT_RST), Pin.OUT),
-						rotation=3)
+						rotation=rotation)
 	panel.init()
 
 	blPin = Pin(pins.get(Pins.BL), mode=Pin.OUT, value=True)
