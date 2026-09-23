@@ -7,7 +7,7 @@ class MatrixBig(MatrixOutputPart):
 		self.revision = revision
 
 	def map(self, x, y):
-		if (self.revision == 2):
+		if self.revision == 2 or self.revision == 3:
 			return x, y
 		else:
 			return self.get_width() - x - 1, y
